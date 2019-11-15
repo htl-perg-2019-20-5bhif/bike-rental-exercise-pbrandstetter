@@ -1,0 +1,70 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BikeRentalService.Model
+{
+    class Customer
+    {
+        /// <summary>
+        /// Unique number identifies the customer
+        /// </summary>
+        public int CustomerId { get; set; }
+
+        /// <summary>
+        /// Mandatory value indicates the gender of the customer -
+        /// possible values are: "Male", "Female", "Unknown"
+        /// </summary>
+        [GenderValidation]
+        [Required]
+        public string Gender { get; set; }
+
+        /// <summary>
+        /// Mandatory first name of the customer
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Mandatory last name of the customer
+        /// </summary>
+        [StringLength(75)]
+        [Required]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// Mandatory date of birth (no time)
+        /// </summary>
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
+        [Required]
+        public DateTime BirthDay { get; set; }
+
+        /// <summary>
+        /// Mandatory name of the street
+        /// </summary>
+        [StringLength(75)]
+        [Required]
+        public string Street { get; set; }
+
+        /// <summary>
+        /// Mandatory house number
+        /// </summary>
+        [StringLength(10)]
+        public string HouseNumber { get; set; }
+
+        /// <summary>
+        /// Mandatory Zip code
+        /// </summary>
+        [StringLength(10)]
+        [Required]
+        public string ZipCode { get; set; }
+
+        /// <summary>
+        /// Mandatory name of the town
+        /// </summary>
+        [StringLength(75)]
+        [Required]
+        public string Town { get; set; }
+    }
+}

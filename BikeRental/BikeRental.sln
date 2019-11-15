@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.138
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeRentalApi", "BikeRental\BikeRentalApi.csproj", "{0EFAEF05-A574-44BD-A6AD-36F660435001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeRentalService", "BikeRentalService\BikeRentalService.csproj", "{C1DAEA87-B612-4C37-92EF-A766F4340D1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EFAEF05-A574-44BD-A6AD-36F660435001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EFAEF05-A574-44BD-A6AD-36F660435001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EFAEF05-A574-44BD-A6AD-36F660435001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EFAEF05-A574-44BD-A6AD-36F660435001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DAEA87-B612-4C37-92EF-A766F4340D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DAEA87-B612-4C37-92EF-A766F4340D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DAEA87-B612-4C37-92EF-A766F4340D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DAEA87-B612-4C37-92EF-A766F4340D1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68FE8418-8F9B-4B78-B9EF-1D0B27FBB2B4}
+	EndGlobalSection
+EndGlobal
