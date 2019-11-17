@@ -19,14 +19,24 @@ namespace BikeRentalApi.Controllers
             _context = context;
         }
 
-        // GET: api/Bikes
+        /// <summary>
+        /// GET all bikes: api/Bikes
+        /// </summary>
+        /// <returns>A list of <see cref="Bike"/>s</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bike>>> GetBikes()
         {
             return await _context.Bikes.ToListAsync();
         }
 
-        // GET: api/Bikes/5
+        // TODO: Get all bikes that are currently available
+        // TODO: Add optional sorting by priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)
+
+        /// <summary>
+        /// GET a specific bike: api/Bikes/5
+        /// </summary>
+        /// <param name="id">Unique id of bike</param>
+        /// <returns>A bike with specified id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Bike>> GetBike(int id)
         {
@@ -40,7 +50,12 @@ namespace BikeRentalApi.Controllers
             return bike;
         }
 
-        // PUT: api/Bikes/5
+        /// <summary>
+        /// PUT a bike: api/Bikes/5
+        /// </summary>
+        /// <param name="id">Unique id of bike</param>
+        /// <param name="bike">Bike with updated fields</param>
+        /// <returns></returns>
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
@@ -72,7 +87,11 @@ namespace BikeRentalApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Bikes
+        /// <summary>
+        /// POST a new Bike: api/Bikes
+        /// </summary>
+        /// <param name="bike">The bike that has to be added</param>
+        /// <returns>The new bike with its Id</returns>
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
@@ -84,7 +103,11 @@ namespace BikeRentalApi.Controllers
             return CreatedAtAction("GetBike", new { id = bike.Id }, bike);
         }
 
-        // DELETE: api/Bikes/5
+        /// <summary>
+        /// DELETE a bike: api/Bikes/5
+        /// </summary>
+        /// <param name="id">Unique id of bike</param>
+        /// <returns>The bike that was deleted</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Bike>> DeleteBike(int id)
         {
@@ -100,6 +123,11 @@ namespace BikeRentalApi.Controllers
             return bike;
         }
 
+        /// <summary>
+        /// Indicates if a bike already exists or not
+        /// </summary>
+        /// <param name="id">Unique id of bike</param>
+        /// <returns>Boolean if customer exists or not</returns>
         private bool BikeExists(int id)
         {
             return _context.Bikes.Any(e => e.Id == id);

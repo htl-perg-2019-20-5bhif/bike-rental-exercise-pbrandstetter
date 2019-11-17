@@ -19,14 +19,26 @@ namespace BikeRentalApi.Controllers
             _context = context;
         }
 
-        // GET: api/Customers
+        /// <summary>
+        /// GET all customers: api/Customers
+        /// OR filter by last name: api/Customers?lastName=Bar
+        /// </summary>
+        /// <param name="lastName">Optional filter parameter</param>
+        /// <returns>A list of customers, optionally filtered by last name</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromRoute]string lastName = "")
         {
+            // TODO: Add optional filter for the last name
             return await _context.Customers.ToListAsync();
         }
 
-        // GET: api/Customers/5
+        // TODO: Get all rentals for a specific customer
+
+        /// <summary>
+        /// GET a specific customer: api/Customers/5
+        /// </summary>
+        /// <param name="id">Unique id of customer</param>
+        /// <returns>A customer with specified id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
@@ -40,7 +52,12 @@ namespace BikeRentalApi.Controllers
             return customer;
         }
 
-        // PUT: api/Customers/5
+        /// <summary>
+        /// PUT a customer: api/Customers/5
+        /// </summary>
+        /// <param name="id">Unique id of customer</param>
+        /// <param name="customer">Customer with udpated fields</param>
+        /// <returns></returns>
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
@@ -72,7 +89,11 @@ namespace BikeRentalApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Customers
+        /// <summary>
+        /// POST a new Customer: api/Customers
+        /// </summary>
+        /// <param name="customer">The customer who has to be added</param>
+        /// <returns>The new customer with her Id</returns>
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
@@ -84,7 +105,11 @@ namespace BikeRentalApi.Controllers
             return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
         }
 
-        // DELETE: api/Customers/5
+        /// <summary>
+        /// DELETE a customer: api/Customers/5
+        /// </summary>
+        /// <param name="id">Unique id of customer</param>
+        /// <returns>The customer who was deleted</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
@@ -100,6 +125,11 @@ namespace BikeRentalApi.Controllers
             return customer;
         }
 
+        /// <summary>
+        /// Indicates if customer already exists or not
+        /// </summary>
+        /// <param name="id">Unique id of customer</param>
+        /// <returns>Boolean if customer exists or not</returns>
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.Id == id);
