@@ -4,17 +4,18 @@ namespace BikeRentalService.Model
 {
     class BikeCategoryValidation : ValidationAttribute
     {
-        public override bool IsValid(object value)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            var bike = (Bike)validationContext.ObjectInstance;
             string[] categories = { "Standard bike", "Mountainbike", "Trecking bike", "Racing bike" };
             foreach (string category in categories)
             {
-                if (category.Equals(value))
+                if (category.Equals(bike.BikeCategory))
                 {
-                    return true;
+                    return ValidationResult.Success;
                 }
             }
-            return false;
+            return new ValidationResult("This Bike Category Is Not Allowed");
         }
     }
 }

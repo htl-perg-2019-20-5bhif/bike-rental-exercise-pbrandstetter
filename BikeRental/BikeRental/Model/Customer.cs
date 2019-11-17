@@ -3,20 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BikeRentalService.Model
 {
-    class Customer
+    public class Customer
     {
         /// <summary>
         /// Unique number identifies the customer
         /// </summary>
-        public int CustomerId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Mandatory value indicates the gender of the customer -
         /// possible values are: "Male", "Female", "Unknown"
         /// </summary>
-        [GenderValidation]
         [Required]
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
 
         /// <summary>
         /// Mandatory first name of the customer
@@ -66,5 +65,12 @@ namespace BikeRentalService.Model
         [StringLength(75)]
         [Required]
         public string Town { get; set; }
+    }
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        Unknown
     }
 }

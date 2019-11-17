@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeRentalService.Model
 {
-    class Rental
+    public class Rental
     {
         /// <summary>
-        /// Unique number identifies a rentre
+        /// Unique number identifies a rent
         /// </summary>
-        public int RentalId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Mandatory reference to the customer who rented the bike
@@ -43,6 +44,7 @@ namespace BikeRentalService.Model
         /// Minimum value is 0.00
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalCost { get; set; }
 
         /// <summary>

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeRentalService.Model
 {
-    class Bike
+    public class Bike
     {
         /// <summary>
         /// Unique number identifies a bike
         /// </summary>
-        public int BikeId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Mandatory value indicates the brand of the bike
@@ -43,6 +44,7 @@ namespace BikeRentalService.Model
         /// Minimum value is 0.00
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Column(TypeName = "decimal(18,2)")]
         [Required]
         public decimal PriceFirstHour { get; set; }
 
@@ -50,6 +52,7 @@ namespace BikeRentalService.Model
         /// Mandatory rental price in Euro for each additional hour
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Column(TypeName = "decimal(18,2)")]
         [Required]
         public decimal PricePerAdditionalHour { get; set; }
 
