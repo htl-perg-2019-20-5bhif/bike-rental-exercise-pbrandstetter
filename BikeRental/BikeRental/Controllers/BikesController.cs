@@ -29,8 +29,17 @@ namespace BikeRentalApi.Controllers
             return await _context.Bikes.ToListAsync();
         }
 
-        // TODO: Get all bikes that are currently available
-        // TODO: Add optional sorting by priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)
+        [HttpGet("/available")]
+        public async Task<ActionResult<IEnumerable<Bike>>> GetAvailableBikes([FromQuery]string sortBy = "")
+        {
+            var rentals = _context.Rentals;
+            var bikes = _context.Bikes;
+            var availableBikes = bikes.Where(b => rentals.Any(r => r.BikeId == b.Id));
+
+            // TODO: Add optional sorting by priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)
+
+            return await availableBikes.ToArrayAsync();
+        }
 
         /// <summary>
         /// GET a specific bike: api/Bikes/5

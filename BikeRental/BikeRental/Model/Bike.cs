@@ -21,10 +21,10 @@ namespace BikeRentalService.Model
         /// <summary>
         /// Mandatory value indicates the date when the bike was purchased (no time)
         /// </summary>
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         [Required]
-        public DateTime PurchaseDate { get; set; }
+        [Column(TypeName = "date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime.Date PurchaseDate { get; set; }
 
         /// <summary>
         /// Optional notes or description for the bike
@@ -36,7 +36,7 @@ namespace BikeRentalService.Model
         /// Indicates the date of the last service (no time)
         /// </summary>
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime LastService { get; set; }
 
         /// <summary>

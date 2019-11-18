@@ -26,13 +26,15 @@ namespace BikeRentalApi.Controllers
         /// <param name="lastName">Optional filter parameter</param>
         /// <returns>A list of customers, optionally filtered by last name</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromRoute]string lastName = "")
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromQuery]string lastName = "")
         {
-            // TODO: Add optional filter for the last name
-            return await _context.Customers.ToListAsync();
+            if (lastName == "")
+            {
+                return await _context.Customers.ToListAsync();
+            }
+            var customers = _context.Customers;
+            return await customers.Where(c => c.LastName == lastName).ToListAsync();
         }
-
-        // TODO: Get all rentals for a specific customer
 
         /// <summary>
         /// GET a specific customer: api/Customers/5
@@ -50,6 +52,18 @@ namespace BikeRentalApi.Controllers
             }
 
             return customer;
+        }
+
+        /// <summary>
+        /// Get all rentals for a specific customer
+        /// </summary>
+        /// <param name="id">Unique id of customer</param>
+        /// <returns>A list of rentals for the specified customer</returns>
+        [HttpGet("{id}/rentals")]
+        public async Task<ActionResult<IEnumerable<Rental>>> GetRentals(int id)
+        {
+            var rentals = _context.Rentals;
+            return await rentals.Where(r => r.CustomerId == id).ToListAsync();
         }
 
         /// <summary>

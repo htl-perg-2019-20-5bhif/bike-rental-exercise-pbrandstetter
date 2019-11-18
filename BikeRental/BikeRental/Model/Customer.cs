@@ -34,9 +34,9 @@ namespace BikeRentalService.Model
         /// <summary>
         /// Mandatory date of birth (no time)
         /// </summary>
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
-        [DataType(DataType.Date)]
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime BirthDay { get; set; }
 
         /// <summary>
