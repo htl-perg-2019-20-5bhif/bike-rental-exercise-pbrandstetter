@@ -22,13 +22,18 @@ namespace BikeRentalApi.Controllers
         /// <summary>
         /// GET all bikes: api/Bikes
         /// </summary>
-        /// <returns>A list of <see cref="Bike"/>s</returns>
+        /// <returns>A list of bikes</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bike>>> GetBikes()
         {
             return await _context.Bikes.ToListAsync();
         }
 
+        /// <summary>
+        /// GET all available bikes: api/Bikes/available
+        /// </summary>
+        /// <param name="sortBy">Optional values: priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)</param>
+        /// <returns>A list of bikes</returns>
         [HttpGet("/available")]
         public async Task<ActionResult<IEnumerable<Bike>>> GetAvailableBikes([FromQuery]string sortBy = "")
         {
@@ -36,7 +41,14 @@ namespace BikeRentalApi.Controllers
             var bikes = _context.Bikes;
             var availableBikes = bikes.Where(b => rentals.Any(r => r.BikeId == b.Id));
 
-            // TODO: Add optional sorting by priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)
+            switch (sortBy)
+            {
+                case "": break;
+                case "priceFirstHour": availableBikes.OrderBy(b => b.PriceFirstHour); break;
+                case "priceAdditionalHours": availableBikes.OrderBy(b => b.PricePerAdditionalHour); break;
+                case "purchaseDate": availableBikes.OrderByDescending(b => b.PurchaseDate); break;
+                default: return NotFound("No such filter method found");
+            }
 
             return await availableBikes.ToArrayAsync();
         }

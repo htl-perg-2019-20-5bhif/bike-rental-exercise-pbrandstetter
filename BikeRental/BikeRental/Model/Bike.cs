@@ -24,7 +24,7 @@ namespace BikeRentalService.Model
         [Required]
         [Column(TypeName = "date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime.Date PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }
 
         /// <summary>
         /// Optional notes or description for the bike
@@ -35,7 +35,7 @@ namespace BikeRentalService.Model
         /// <summary>
         /// Indicates the date of the last service (no time)
         /// </summary>
-        [DataType(DataType.Date)]
+        [Column(TypeName = "date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime LastService { get; set; }
 
@@ -44,17 +44,20 @@ namespace BikeRentalService.Model
         /// Minimum value is 0.00
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Range(0, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         [Required]
-        public decimal PriceFirstHour { get; set; }
+        public double PriceFirstHour { get; set; }
 
         /// <summary>
         /// Mandatory rental price in Euro for each additional hour
+        /// Minimum value is 1.00
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Range(1, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         [Required]
-        public decimal PricePerAdditionalHour { get; set; }
+        public double PricePerAdditionalHour { get; set; }
 
         /// <summary>
         /// Possible bike categories are:

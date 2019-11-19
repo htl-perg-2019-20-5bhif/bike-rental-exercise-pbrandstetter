@@ -33,7 +33,7 @@ namespace BikeRentalApi.Controllers
                 return await _context.Customers.ToListAsync();
             }
             var customers = _context.Customers;
-            return await customers.Where(c => c.LastName == lastName).ToListAsync();
+            return await customers.Where(c => c.LastName.Contains(lastName)).ToListAsync();
         }
 
         /// <summary>

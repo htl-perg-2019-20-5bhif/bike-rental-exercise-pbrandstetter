@@ -44,8 +44,9 @@ namespace BikeRentalService.Model
         /// Minimum value is 0.00
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Range(0, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalCost { get; set; }
+        public double TotalCost { get; set; }
 
         /// <summary>
         /// boolean flag indicating whether the rental has already been paid by the customer,

@@ -195,10 +195,10 @@ namespace BikeRentalApi.Controllers
         /// </summary>
         /// <param name="rental">Rental of which the costs should be calculated</param>
         /// <returns>Total costs of a rental</returns>
-        private decimal CalculateTotalCosts(Rental rental)
+        private double CalculateTotalCosts(Rental rental)
         {
             var duration = rental.RentalEnd - rental.RentalBegin;
-            decimal totalCost = 0;
+            double totalCost = 0;
             if (duration.Minutes <= 15)
             {
                 return totalCost;

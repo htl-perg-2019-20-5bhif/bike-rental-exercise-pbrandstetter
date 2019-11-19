@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeRentalService.Model
 {
@@ -35,7 +36,7 @@ namespace BikeRentalService.Model
         /// Mandatory date of birth (no time)
         /// </summary>
         [Required]
-        [DataType(DataType.Date)]
+        [Column(TypeName = "date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime BirthDay { get; set; }
 
