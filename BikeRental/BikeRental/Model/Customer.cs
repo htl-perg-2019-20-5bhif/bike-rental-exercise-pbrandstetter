@@ -37,6 +37,7 @@ namespace BikeRentalService.Model
         /// </summary>
         [Required]
         [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime BirthDay { get; set; }
 

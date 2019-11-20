@@ -34,7 +34,7 @@ namespace BikeRentalApi.Controllers
         /// Get a list of unpaid, ended rentals with total price > 0: api/Rentals/unpaid
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/unpaid")]
+        [HttpGet("unpaid")]
         public async Task<ActionResult<IEnumerable<Rental>>> GetUnpaidRentals()
         {
             // TODO: Return: Customer's ID, first and last name, Rental's ID, start end, end date, and total price
@@ -147,7 +147,7 @@ namespace BikeRentalApi.Controllers
         /// <returns>The new rental with its Id and RentalBegin</returns>
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost("/start")]
+        [HttpPost("start")]
         public async Task<ActionResult<Rental>> StartRental(Rental rental)
         {
             rental.RentalBegin = DateTime.Now;

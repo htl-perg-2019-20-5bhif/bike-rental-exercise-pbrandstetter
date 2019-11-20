@@ -23,6 +23,7 @@ namespace BikeRentalService.Model
         /// </summary>
         [Required]
         [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime PurchaseDate { get; set; }
 
@@ -36,6 +37,7 @@ namespace BikeRentalService.Model
         /// Indicates the date of the last service (no time)
         /// </summary>
         [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime LastService { get; set; }
 

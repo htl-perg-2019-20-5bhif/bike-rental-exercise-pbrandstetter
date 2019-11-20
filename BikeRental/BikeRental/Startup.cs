@@ -22,6 +22,12 @@ namespace BikeRental
         {
             services.AddDbContext<BikeRentalContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionsStrings:DefaultConnection"]));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BikeRental API", Version = "v1.0" });
+            });
+
             services.AddControllers();
         }
 
@@ -42,6 +48,13 @@ namespace BikeRental
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BikeRental API v1.0");
             });
         }
     }

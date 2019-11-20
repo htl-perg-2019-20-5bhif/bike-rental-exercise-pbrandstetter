@@ -34,7 +34,7 @@ namespace BikeRentalApi.Controllers
         /// </summary>
         /// <param name="sortBy">Optional values: priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)</param>
         /// <returns>A list of bikes</returns>
-        [HttpGet("/available")]
+        [HttpGet("available")]
         public async Task<ActionResult<IEnumerable<Bike>>> GetAvailableBikes([FromQuery]string sortBy = "")
         {
             var rentals = _context.Rentals;
