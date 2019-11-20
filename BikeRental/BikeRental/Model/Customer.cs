@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BikeRentalApi.Model.Validators;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +17,9 @@ namespace BikeRentalService.Model
         /// possible values are: "Male", "Female", "Unknown"
         /// </summary>
         [Required]
-        public Gender Gender { get; set; }
+        [GenderValidator]
+        [StringLength(10)]
+        public string Gender { get; set; }
 
         /// <summary>
         /// Mandatory first name of the customer
@@ -38,7 +41,7 @@ namespace BikeRentalService.Model
         [Required]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [PastDateValidator]
         public DateTime BirthDay { get; set; }
 
         /// <summary>
@@ -67,12 +70,5 @@ namespace BikeRentalService.Model
         [StringLength(75)]
         [Required]
         public string Town { get; set; }
-    }
-
-    public enum Gender
-    {
-        Male,
-        Female,
-        Unknown
     }
 }

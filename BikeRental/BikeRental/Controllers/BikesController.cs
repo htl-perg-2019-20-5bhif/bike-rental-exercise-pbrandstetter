@@ -39,14 +39,14 @@ namespace BikeRentalApi.Controllers
         {
             var rentals = _context.Rentals;
             var bikes = _context.Bikes;
-            var availableBikes = bikes.Where(b => rentals.Any(r => r.BikeId == b.Id));
+            var availableBikes = bikes.Where(b => !rentals.Any(r => r.BikeId == b.Id));
 
             switch (sortBy)
             {
                 case "": break;
-                case "priceFirstHour": availableBikes.OrderBy(b => b.PriceFirstHour); break;
-                case "priceAdditionalHours": availableBikes.OrderBy(b => b.PricePerAdditionalHour); break;
-                case "purchaseDate": availableBikes.OrderByDescending(b => b.PurchaseDate); break;
+                case "priceFirstHour": availableBikes = availableBikes.OrderBy(b => b.PriceFirstHour); break;
+                case "priceAdditionalHours": availableBikes = availableBikes.OrderBy(b => b.PricePerAdditionalHour); break;
+                case "purchaseDate": availableBikes = availableBikes.OrderByDescending(b => b.PurchaseDate); break;
                 default: return NotFound("No such filter method found");
             }
 

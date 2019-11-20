@@ -1,4 +1,5 @@
-﻿using BikeRentalService;
+﻿using BikeRentalApi.Dtos;
+using BikeRentalService;
 using BikeRentalService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,11 +36,30 @@ namespace BikeRentalApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("unpaid")]
-        public async Task<ActionResult<IEnumerable<Rental>>> GetUnpaidRentals()
+        public List<UnpaidRentalDto> GetUnpaidRentals()
         {
-            // TODO: Return: Customer's ID, first and last name, Rental's ID, start end, end date, and total price
-            var rentals = _context.Rentals.Include(r => r.Bike).Include(r => r.Customer);
-            return await rentals.Where(r => r.Paid == false && r.TotalCost > 0).ToListAsync();
+            var rentals = _context.Rentals
+                .Include(r => r.Bike)
+                .Include(r => r.Customer)
+                .Where(r => r.Paid == false && r.TotalCost > 0);
+
+            List<UnpaidRentalDto> rentalDto = new List<UnpaidRentalDto>();
+
+            foreach (Rental r in rentals)
+            {
+                rentalDto.Add(new UnpaidRentalDto
+                {
+                    RentalId = r.Id,
+                    RentalBegin = r.RentalBegin,
+                    RentalEnd = r.RentalEnd,
+                    CustomerId = r.CustomerId,
+                    FirstName = r.Customer.FirstName,
+                    LastName = r.Customer.LastName,
+                    TotalCost = r.TotalCost
+                });
+            }
+
+            return rentalDto;
         }
 
         /// <summary>
@@ -81,8 +101,9 @@ namespace BikeRentalApi.Controllers
 
             try
             {
+                CostCalculator costCalculator = new CostCalculator();
                 rental.RentalEnd = DateTime.Now;
-                rental.TotalCost = CalculateTotalCosts(rental);
+                rental.TotalCost = costCalculator.CalculateTotalCosts(rental);
                 rental.Paid = false;
                 await _context.SaveChangesAsync();
             }
@@ -110,7 +131,7 @@ namespace BikeRentalApi.Controllers
         public async Task<IActionResult> PayRental(int id)
         {
             var rental = _context.Rentals.Where(r => r.Id == id).First();
-            if (id != rental.Id)
+            if (id != rental.Id || (rental.Paid && rental.TotalCost == 0) || (rental.RentalEnd == DateTime.MinValue && rental.Paid))
             {
                 return BadRequest();
             }
@@ -119,11 +140,8 @@ namespace BikeRentalApi.Controllers
 
             try
             {
-                if (rental.TotalCost > 0)
-                {
-                    rental.Paid = true;
-                    await _context.SaveChangesAsync();
-                }
+                rental.Paid = true;
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -150,6 +168,15 @@ namespace BikeRentalApi.Controllers
         [HttpPost("start")]
         public async Task<ActionResult<Rental>> StartRental(Rental rental)
         {
+            var rentals = _context.Rentals;
+            bool hasRental = rentals
+                .Any(r => r.CustomerId == rental.CustomerId && (r.RentalEnd == DateTime.MinValue || !r.Paid));
+
+            if (hasRental)
+            {
+                return BadRequest("The customer has a active rental");
+            }
+
             rental.RentalBegin = DateTime.Now;
             rental.RentalEnd = new DateTime();
             rental.TotalCost = 0;
@@ -188,27 +215,6 @@ namespace BikeRentalApi.Controllers
         private bool RentalExists(int id)
         {
             return _context.Rentals.Any(e => e.Id == id);
-        }
-
-        /// <summary>
-        /// Calculates the costs of a rental based on the bikes prices and the duration
-        /// </summary>
-        /// <param name="rental">Rental of which the costs should be calculated</param>
-        /// <returns>Total costs of a rental</returns>
-        private double CalculateTotalCosts(Rental rental)
-        {
-            var duration = rental.RentalEnd - rental.RentalBegin;
-            double totalCost = 0;
-            if (duration.Minutes <= 15)
-            {
-                return totalCost;
-            }
-            totalCost += rental.Bike.PriceFirstHour;
-            if (duration.Hours - 1 > 0)
-            {
-                totalCost += (int)(Math.Ceiling(duration.TotalHours - 1)) * rental.Bike.PricePerAdditionalHour;
-            }
-            return totalCost;
         }
     }
 }

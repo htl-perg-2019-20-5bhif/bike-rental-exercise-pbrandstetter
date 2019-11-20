@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BikeRentalApi.Model.Validators;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -31,19 +32,21 @@ namespace BikeRentalService.Model
         /// Mandatory date and time indicates when the bike rental begins
         /// </summary>
         [Required]
+        [PastDateValidator]
         public DateTime RentalBegin { get; set; }
 
         /// <summary>
         /// Indicates the date and time when the bike rental ends,
         /// Must be greater than <see cref="RentalBegin"/>
         /// </summary>
+        [PastDateValidator]
+        [RentalEndBeginValidator]
         public DateTime RentalEnd { get; set; }
 
         /// <summary>
         /// Total cost in Euro for renting a bike, two decimal places,
         /// Minimum value is 0.00
         /// </summary>
-        [DisplayFormat(DataFormatString = "{0:C}")]
         [Range(0, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         public double TotalCost { get; set; }
@@ -52,6 +55,7 @@ namespace BikeRentalService.Model
         /// boolean flag indicating whether the rental has already been paid by the customer,
         /// can only be true if the rental has already ended (i.e. <see cref="RentalEnd"/> and total <see cref="TotalCost"/> are set)
         /// </summary>
+        [PaidValidator]
         public bool Paid { get; set; }
     }
 }

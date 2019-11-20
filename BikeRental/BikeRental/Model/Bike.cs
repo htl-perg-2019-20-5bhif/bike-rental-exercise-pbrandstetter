@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BikeRentalApi.Model.Validators;
+using BikeRentalService.Model.Validators;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,7 +26,7 @@ namespace BikeRentalService.Model
         [Required]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [PastDateValidator]
         public DateTime PurchaseDate { get; set; }
 
         /// <summary>
@@ -38,14 +40,13 @@ namespace BikeRentalService.Model
         /// </summary>
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [PastDateValidator]
         public DateTime LastService { get; set; }
 
         /// <summary>
         /// Mandatory rental price in Euro for first hour,
         /// Minimum value is 0.00
         /// </summary>
-        [DisplayFormat(DataFormatString = "{0:C}")]
         [Range(0, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         [Required]
@@ -55,7 +56,6 @@ namespace BikeRentalService.Model
         /// Mandatory rental price in Euro for each additional hour
         /// Minimum value is 1.00
         /// </summary>
-        [DisplayFormat(DataFormatString = "{0:C}")]
         [Range(1, double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         [Required]
@@ -65,7 +65,7 @@ namespace BikeRentalService.Model
         /// Possible bike categories are:
         /// "Standard bike", "Mountainbike", "Trecking bike", "Racing bike"
         /// </summary>
-        [BikeCategoryValidation]
+        [BikeCategoryValidator]
         public string BikeCategory { get; set; }
     }
 }

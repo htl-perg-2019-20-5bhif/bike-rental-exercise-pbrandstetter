@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BikeRentalService.Model
+namespace BikeRentalService.Model.Validators
 {
-    class BikeCategoryValidation : ValidationAttribute
+    class BikeCategoryValidator : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -15,7 +15,8 @@ namespace BikeRentalService.Model
                     return ValidationResult.Success;
                 }
             }
-            return new ValidationResult("This Bike Category Is Not Allowed");
+            return new ValidationResult("BikeCategory must be \"Standard bike\", " +
+                "\"Mountainbike\", \"Trecking bike\" or \"Racing bike\"");
         }
     }
 }
