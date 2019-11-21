@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BikeRentalApi.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Sqlite : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,13 +12,13 @@ namespace BikeRentalApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Brand = table.Column<string>(maxLength: 25, nullable: false),
-                    PurchaseDate = table.Column<DateTime>(nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "date", nullable: false),
                     Notes = table.Column<string>(maxLength: 1000, nullable: true),
-                    LastService = table.Column<DateTime>(nullable: false),
-                    PriceFirstHour = table.Column<decimal>(nullable: false),
-                    PricePerAdditionalHour = table.Column<decimal>(nullable: false),
+                    LastService = table.Column<DateTime>(type: "date", nullable: false),
+                    PriceFirstHour = table.Column<double>(type: "decimal(18,2)", nullable: false),
+                    PricePerAdditionalHour = table.Column<double>(type: "decimal(18,2)", nullable: false),
                     BikeCategory = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -31,11 +31,11 @@ namespace BikeRentalApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Gender = table.Column<int>(nullable: false),
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Gender = table.Column<string>(maxLength: 10, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 75, nullable: false),
-                    BirthDay = table.Column<DateTime>(nullable: false),
+                    BirthDay = table.Column<DateTime>(type: "date", nullable: false),
                     Street = table.Column<string>(maxLength: 75, nullable: false),
                     HouseNumber = table.Column<string>(maxLength: 10, nullable: true),
                     ZipCode = table.Column<string>(maxLength: 10, nullable: false),
@@ -51,12 +51,12 @@ namespace BikeRentalApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     CustomerId = table.Column<int>(nullable: false),
                     BikeId = table.Column<int>(nullable: false),
                     RentalBegin = table.Column<DateTime>(nullable: false),
                     RentalEnd = table.Column<DateTime>(nullable: false),
-                    TotalCost = table.Column<decimal>(nullable: false),
+                    TotalCost = table.Column<double>(type: "decimal(18,2)", nullable: false),
                     Paid = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

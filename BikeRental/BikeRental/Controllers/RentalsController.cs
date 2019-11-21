@@ -131,6 +131,7 @@ namespace BikeRentalApi.Controllers
         public async Task<IActionResult> PayRental(int id)
         {
             var rental = _context.Rentals.Where(r => r.Id == id).First();
+            // TODO: make this working with validator
             if (id != rental.Id || (rental.Paid && rental.TotalCost == 0) || (rental.RentalEnd == DateTime.MinValue && rental.Paid))
             {
                 return BadRequest();

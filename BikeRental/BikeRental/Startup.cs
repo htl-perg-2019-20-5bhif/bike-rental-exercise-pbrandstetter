@@ -21,7 +21,7 @@ namespace BikeRental
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BikeRentalContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionsStrings:DefaultConnection"]));
+                options.UseSqlite(Configuration["ConnectionsStrings:Sqlite"]));
 
             services.AddSwaggerGen(c =>
             {
