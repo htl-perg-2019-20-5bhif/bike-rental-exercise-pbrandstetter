@@ -1,4 +1,5 @@
-﻿using BikeRentalService;
+﻿using BikeRentalApi.Dtos;
+using BikeRentalService;
 using BikeRentalService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +27,13 @@ namespace BikeRentalApi.Controllers
         /// <param name="lastName">Optional filter parameter</param>
         /// <returns>A list of customers, optionally filtered by last name</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromQuery]string lastName = "")
+        public ActionResult<IEnumerable<CustomerDto>> GetCustomers([FromQuery]string lastName = "")
         {
             if (lastName == "")
             {
-                return await _context.Customers.ToListAsync();
+                return CustomerDto.ToCustomerDto(_context.Customers.ToList());
             }
-            var customers = _context.Customers;
-            return await customers.Where(c => c.LastName.Contains(lastName)).ToListAsync();
+            return CustomerDto.ToCustomerDto(_context.Customers.Where(c => c.LastName.Contains(lastName)).ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of customer</param>
         /// <returns>A customer with specified id</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<CustomerDto>> GetCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
 
@@ -51,7 +51,7 @@ namespace BikeRentalApi.Controllers
                 return NotFound();
             }
 
-            return customer;
+            return CustomerDto.ToCustomerDto(customer);
         }
 
         /// <summary>
@@ -60,10 +60,10 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of customer</param>
         /// <returns>A list of rentals for the specified customer</returns>
         [HttpGet("{id}/rentals")]
-        public async Task<ActionResult<IEnumerable<Rental>>> GetRentals(int id)
+        public ActionResult<IEnumerable<RentalDto>> GetRentals(int id)
         {
             var rentals = _context.Rentals;
-            return await rentals.Where(r => r.CustomerId == id).ToListAsync();
+            return RentalDto.ToRentalDto(rentals.Where(r => r.CustomerId == id).ToList());
         }
 
         /// <summary>
@@ -75,14 +75,15 @@ namespace BikeRentalApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutCustomer(int id, CustomerDto customer)
         {
-            if (id != customer.Id)
+            Customer c = CustomerDto.FromCustomerDto(customer);
+            if (id != c.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
+            _context.Entry(c).State = EntityState.Modified;
 
             try
             {
@@ -111,12 +112,13 @@ namespace BikeRentalApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDto>> PostCustomer(CustomerDto customer)
         {
-            _context.Customers.Add(customer);
+            Customer c = CustomerDto.FromCustomerDto(customer);
+            _context.Customers.Add(c);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            return CreatedAtAction("GetCustomer", new { id = customer.Id }, CustomerDto.ToCustomerDto(c));
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of customer</param>
         /// <returns>The customer who was deleted</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Customer>> DeleteCustomer(int id)
+        public async Task<ActionResult<CustomerDto>> DeleteCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
@@ -136,7 +138,7 @@ namespace BikeRentalApi.Controllers
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
 
-            return customer;
+            return CustomerDto.ToCustomerDto(customer);
         }
 
         /// <summary>

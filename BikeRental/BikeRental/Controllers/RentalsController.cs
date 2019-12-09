@@ -26,9 +26,9 @@ namespace BikeRentalApi.Controllers
         /// </summary>
         /// <returns>A list of rentals</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rental>>> GetRentals()
+        public ActionResult<IEnumerable<RentalDto>> GetRentals()
         {
-            return await _context.Rentals.Include(r => r.Bike).Include(r => r.Customer).ToListAsync();
+            return RentalDto.ToRentalDto(_context.Rentals.Include(r => r.Bike).Include(r => r.Customer).ToList());
         }
 
         /// <summary>
@@ -43,23 +43,7 @@ namespace BikeRentalApi.Controllers
                 .Include(r => r.Customer)
                 .Where(r => r.Paid == false && r.TotalCost > 0);
 
-            List<UnpaidRentalDto> rentalDto = new List<UnpaidRentalDto>();
-
-            foreach (Rental r in rentals)
-            {
-                rentalDto.Add(new UnpaidRentalDto
-                {
-                    RentalId = r.Id,
-                    RentalBegin = r.RentalBegin,
-                    RentalEnd = r.RentalEnd,
-                    CustomerId = r.CustomerId,
-                    FirstName = r.Customer.FirstName,
-                    LastName = r.Customer.LastName,
-                    TotalCost = r.TotalCost
-                });
-            }
-
-            return rentalDto;
+            return UnpaidRentalDto.ToUnpaidRentalDto(rentals.ToList());
         }
 
         /// <summary>
@@ -68,7 +52,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of a rental</param>
         /// <returns>A rental with specified id</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rental>> GetRental(int id)
+        public async Task<ActionResult<RentalDto>> GetRental(int id)
         {
             var rental = await _context.Rentals.FindAsync(id);
 
@@ -77,7 +61,7 @@ namespace BikeRentalApi.Controllers
                 return NotFound();
             }
 
-            return rental;
+            return RentalDto.ToRentalDto(rental);
         }
 
         /// <summary>
@@ -167,8 +151,9 @@ namespace BikeRentalApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("start")]
-        public async Task<ActionResult<Rental>> StartRental(Rental rental)
+        public async Task<ActionResult<Rental>> StartRental(RentalDto rental)
         {
+            Rental r = RentalDto.FromRentalDto(rental);
             var rentals = _context.Rentals;
             bool hasRental = rentals
                 .Any(r => r.CustomerId == rental.CustomerId && (r.RentalEnd == DateTime.MinValue || !r.Paid));
@@ -178,14 +163,14 @@ namespace BikeRentalApi.Controllers
                 return BadRequest("The customer has a active rental");
             }
 
-            rental.RentalBegin = DateTime.Now;
-            rental.RentalEnd = new DateTime();
-            rental.TotalCost = 0;
-            rental.Paid = false;
-            _context.Rentals.Add(rental);
+            r.RentalBegin = DateTime.Now;
+            r.RentalEnd = new DateTime();
+            r.TotalCost = 0;
+            r.Paid = false;
+            _context.Rentals.Add(r);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRental", new { id = rental.Id }, rental);
+            return CreatedAtAction("GetRental", new { id = rental.Id }, RentalDto.ToRentalDto(r));
         }
 
         /// <summary>
@@ -194,7 +179,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of a rental</param>
         /// <returns>The rental that was deleted</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Rental>> DeleteRental(int id)
+        public async Task<ActionResult<RentalDto>> DeleteRental(int id)
         {
             var rental = await _context.Rentals.FindAsync(id);
             if (rental == null)
@@ -205,7 +190,7 @@ namespace BikeRentalApi.Controllers
             _context.Rentals.Remove(rental);
             await _context.SaveChangesAsync();
 
-            return rental;
+            return RentalDto.ToRentalDto(rental);
         }
 
         /// <summary>

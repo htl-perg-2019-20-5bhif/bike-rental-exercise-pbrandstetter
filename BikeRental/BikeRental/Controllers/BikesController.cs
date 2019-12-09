@@ -1,4 +1,5 @@
-﻿using BikeRentalService;
+﻿using BikeRentalApi.Dtos;
+using BikeRentalService;
 using BikeRentalService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +25,9 @@ namespace BikeRentalApi.Controllers
         /// </summary>
         /// <returns>A list of bikes</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bike>>> GetBikes()
+        public ActionResult<IEnumerable<BikeDto>> GetBikes()
         {
-            return await _context.Bikes.ToListAsync();
+            return BikeDto.ToBikeDto(_context.Bikes.ToList());
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="sortBy">Optional values: priceFirstHour (ascending), priceAdditionalHours (ascending), purchaseDate (descending)</param>
         /// <returns>A list of bikes</returns>
         [HttpGet("available")]
-        public async Task<ActionResult<IEnumerable<Bike>>> GetAvailableBikes([FromQuery]string sortBy = "")
+        public ActionResult<IEnumerable<BikeDto>> GetAvailableBikes([FromQuery]string sortBy = "")
         {
             var rentals = _context.Rentals;
             var bikes = _context.Bikes;
@@ -50,7 +51,7 @@ namespace BikeRentalApi.Controllers
                 default: return NotFound("No such filter method found");
             }
 
-            return await availableBikes.ToArrayAsync();
+            return BikeDto.ToBikeDto(availableBikes.ToList());
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of bike</param>
         /// <returns>A bike with specified id</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bike>> GetBike(int id)
+        public async Task<ActionResult<BikeDto>> GetBike(int id)
         {
             var bike = await _context.Bikes.FindAsync(id);
 
@@ -68,7 +69,7 @@ namespace BikeRentalApi.Controllers
                 return NotFound();
             }
 
-            return bike;
+            return BikeDto.ToBikeDto(bike);
         }
 
         /// <summary>
@@ -80,14 +81,15 @@ namespace BikeRentalApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBike(int id, Bike bike)
+        public async Task<IActionResult> PutBike(int id, BikeDto bike)
         {
-            if (id != bike.Id)
+            Bike b = BikeDto.FromBikeDto(bike);
+            if (id != b.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(bike).State = EntityState.Modified;
+            _context.Entry(b).State = EntityState.Modified;
 
             try
             {
@@ -116,12 +118,13 @@ namespace BikeRentalApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Bike>> PostBike(Bike bike)
+        public async Task<ActionResult<BikeDto>> PostBike(BikeDto bike)
         {
-            _context.Bikes.Add(bike);
+            Bike b = BikeDto.FromBikeDto(bike);
+            _context.Bikes.Add(b);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBike", new { id = bike.Id }, bike);
+            return CreatedAtAction("GetBike", new { id = bike.Id }, BikeDto.ToBikeDto(b));
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace BikeRentalApi.Controllers
         /// <param name="id">Unique id of bike</param>
         /// <returns>The bike that was deleted</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Bike>> DeleteBike(int id)
+        public async Task<ActionResult<BikeDto>> DeleteBike(int id)
         {
             var bike = await _context.Bikes.FindAsync(id);
             if (bike == null)
@@ -141,7 +144,7 @@ namespace BikeRentalApi.Controllers
             _context.Bikes.Remove(bike);
             await _context.SaveChangesAsync();
 
-            return bike;
+            return BikeDto.ToBikeDto(bike);
         }
 
         /// <summary>
